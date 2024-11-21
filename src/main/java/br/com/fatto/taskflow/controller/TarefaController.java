@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fatto.taskflow.dto.TarefaOrdemDTO;
 import br.com.fatto.taskflow.model.Tarefa;
 import br.com.fatto.taskflow.service.TarefaService;
 
@@ -35,8 +36,8 @@ public class TarefaController {
 	
 	@GetMapping
 	public List<Tarefa> buscarTarefas() {
-		logger.debug("Recebida requisição para listar tarefas");
-		return tarefaService.buscarTodas();
+	    logger.debug("Recebida requisição para listar tarefas ordenadas.");
+	    return tarefaService.buscarTodasOrdenadas();
 	}
 	
 	@PostMapping
@@ -65,5 +66,12 @@ public class TarefaController {
 		logger.info("Recebida requisição para excluir tarefa com ID: {}", id);
 		tarefaService.excluirTarefa(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping("/reordenar")
+	public ResponseEntity<Void> reordenarTarefas(@RequestBody List<TarefaOrdemDTO> tarefasOrdem) {
+	    logger.info("Recebida requisição para reordenar tarefas.");
+	    tarefaService.reordenarTarefas(tarefasOrdem);
+	    return ResponseEntity.noContent().build();
 	}
 }

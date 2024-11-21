@@ -3,6 +3,8 @@ package br.com.fatto.taskflow.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class Tarefa {
 	private BigDecimal custo;
 	
 	@Column(nullable = false )
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataLimite;
 	
 	@Column(nullable = false )
@@ -34,11 +37,16 @@ public class Tarefa {
 	
 	public Tarefa() {}
 	
-	public Tarefa(String nome, BigDecimal custo, LocalDate dataLimite, Integer ordem) {
+	public Tarefa(Long id, String nome, BigDecimal custo, LocalDate dataLimite, Integer ordem) {
+		this.id = id;
 		this.nome = nome;
 		this.custo = custo;
 		this.dataLimite = dataLimite;
 		this.ordem = ordem;
+	}
+	
+	public Long getId() {
+		return id;
 	}
 	
 	public String getNome() {
