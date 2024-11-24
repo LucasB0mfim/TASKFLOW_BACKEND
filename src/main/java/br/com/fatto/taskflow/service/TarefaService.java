@@ -27,14 +27,21 @@ public class TarefaService {
 	public TarefaService(TarefaRepository tarefaRepository) {
 		this.tarefaRepository = tarefaRepository;
 	}
-	
+
 	public Tarefa salvarTarefa(Tarefa tarefa) {
-	    if (tarefa.getOrdem() == null) {
-	    	logger.info("Salvando nova tarefa: {}", tarefa.getNome());
-	        Integer maiorOrdem = tarefaRepository.findMaxOrdem();
-	        tarefa.setOrdem(maiorOrdem != null ? maiorOrdem + 1 : 1);
-	    }
-	    return tarefaRepository.save(tarefa);
+		logger.info("Tentando salvar tarefa: {}", tarefa.getNome());
+
+		// Verificar duplicidade de nome
+		tarefaRepository.findByNome(tarefa.getNome()).ifPresent(existingTask -> {
+			throw new IllegalArgumentException("Já existe uma tarefa com o nome: " + tarefa.getNome());
+		});
+
+		if (tarefa.getOrdem() == null) {
+			Integer maiorOrdem = tarefaRepository.findMaxOrdem();
+			tarefa.setOrdem(maiorOrdem != null ? maiorOrdem + 1 : 1);
+		}
+
+		return tarefaRepository.save(tarefa);
 	}
 
 	public void excluirTarefa(Long id) {
@@ -59,21 +66,21 @@ public class TarefaService {
 
 	@Transactional
 	public void reordenarTarefas(List<TarefaOrdemDTO> tarefasOrdem) {
-	    logger.info("Reordenando tarefas.");
+		logger.info("Reordenando tarefas.");
 
-	    // Validação de duplicidade e consistência
-	    Set<Integer> ordemSet = new HashSet<>();
-	    for (TarefaOrdemDTO tarefaOrdem : tarefasOrdem) {
-	        if (!ordemSet.add(tarefaOrdem.getOrdem())) {
-	            throw new IllegalArgumentException("Valores duplicados encontrados no campo 'ordem'.");
-	        }
-	    }
+		// Validação de duplicidade e consistência
+		Set<Integer> ordemSet = new HashSet<>();
+		for (TarefaOrdemDTO tarefaOrdem : tarefasOrdem) {
+			if (!ordemSet.add(tarefaOrdem.getOrdem())) {
+				throw new IllegalArgumentException("Valores duplicados encontrados no campo 'ordem'.");
+			}
+		}
 
-	    // Atualizar ordens no banco
-	    for (TarefaOrdemDTO tarefaOrdem : tarefasOrdem) {
-	        Tarefa tarefaExistente = buscarPorId(tarefaOrdem.getId());
-	        tarefaExistente.setOrdem(tarefaOrdem.getOrdem());
-	        tarefaRepository.save(tarefaExistente);
-	    }
+		// Atualizar ordens no banco
+		for (TarefaOrdemDTO tarefaOrdem : tarefasOrdem) {
+			Tarefa tarefaExistente = buscarPorId(tarefaOrdem.getId());
+			tarefaExistente.setOrdem(tarefaOrdem.getOrdem());
+			tarefaRepository.save(tarefaExistente);
+		}
 	}
 }
