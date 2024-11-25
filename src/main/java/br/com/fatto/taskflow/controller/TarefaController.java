@@ -19,7 +19,10 @@ import br.com.fatto.taskflow.model.Tarefa;
 import br.com.fatto.taskflow.service.TarefaService;
 
 /**
- * @author Lucas Bomfim 
+ * Controlador REST responsável por gerenciar as tarefas.
+ * Possui endpoints para criar, atualizar, excluir, listar e reordenar tarefas.
+ * 
+ * @author Lucas
  */
 
 @RestController
@@ -30,16 +33,30 @@ public class TarefaController {
 	
 	private TarefaService tarefaService;
 	
+	// Injeta a dependência do serviço TarefaService via construtor.
 	public TarefaController(TarefaService tarefaService) {
 		this.tarefaService = tarefaService;
 	}
 	
+	
+	/**
+     * Endpoint para listar todas as tarefas ordenadas por sua ordem.
+     * 
+     * @return Lista de tarefas.
+     */
 	@GetMapping
 	public List<Tarefa> buscarTarefas() {
 	    logger.debug("Recebida requisição para listar tarefas ordenadas.");
 	    return tarefaService.buscarTodasOrdenadas();
 	}
 	
+	
+	/**
+     * Endpoint para criar uma nova tarefa.
+     * 
+     * @param tarefa Dados da tarefa a ser criada.
+     * @return A tarefa recém-criada.
+     */
 	@PostMapping
 	public ResponseEntity<Tarefa> criarTarefa(@RequestBody Tarefa tarefa) {
 		logger.info("Recebida requisição para criar nova tarefa: {}", tarefa.getNome());
@@ -47,20 +64,29 @@ public class TarefaController {
 		return ResponseEntity.ok(novaTarefa);
 	}
 	
+	
+	/**
+     * Endpoint para atualizar uma tarefa existente.
+     * 
+     * @param id ID da tarefa a ser atualizada.
+     * @param tarefa Dados atualizados da tarefa.
+     * @return A tarefa atualizada.
+     */
 	@PutMapping("/{id}")
 	public ResponseEntity<Tarefa> atualizarTarefa(@PathVariable Long id, @RequestBody Tarefa tarefa) {
-		logger.info("Recebida requisição para atualizar tarefa com ID: {}", id);
-		
-		Tarefa tarefaExistente = tarefaService.buscarPorId(id);
-		tarefaExistente.setNome(tarefa.getNome());
-		tarefaExistente.setCusto(tarefa.getCusto());
-		tarefaExistente.setDataLimite(tarefa.getDataLimite());
-		tarefaExistente.setOrdem(tarefa.getOrdem());
-		
-		Tarefa tarefaAtualizada = tarefaService.salvarTarefa(tarefaExistente);
-		return ResponseEntity.ok(tarefaAtualizada);		
+	    logger.info("Recebida requisição para atualizar tarefa com ID: {}", id);
+
+	    Tarefa tarefaAtualizada = tarefaService.atualizarTarefa(id, tarefa);
+	    return ResponseEntity.ok(tarefaAtualizada);
 	}
 	
+	
+	/**
+     * Endpoint para excluir uma tarefa.
+     * 
+     * @param id ID da tarefa a ser excluída.
+     * @return Resposta sem conteúdo.
+     */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> excluirTarefa(@PathVariable Long id) {
 		logger.info("Recebida requisição para excluir tarefa com ID: {}", id);
@@ -68,6 +94,13 @@ public class TarefaController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	
+	 /**
+     * Endpoint para reordenar tarefas com base em uma lista de ordens fornecidas.
+     * 
+     * @param tarefasOrdem Lista com os IDs das tarefas e suas novas ordens.
+     * @return Resposta sem conteúdo.
+     */
 	@PutMapping("/reordenar")
 	public ResponseEntity<Void> reordenarTarefas(@RequestBody List<TarefaOrdemDTO> tarefasOrdem) {
 	    logger.info("Recebida requisição para reordenar tarefas.");

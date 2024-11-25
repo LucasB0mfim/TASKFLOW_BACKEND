@@ -1,7 +1,10 @@
 package br.com.fatto.taskflow.dto;
 
 /**
- * @author Lucas Bomfim 
+ * DTO (Data Transfer Object) usado para reordenar tarefas.
+ * Contém apenas os campos necessários para a reordenação: ID da tarefa e a nova ordem.
+ * 
+ * @author Lucas
  */
 
 public class TarefaOrdemDTO {

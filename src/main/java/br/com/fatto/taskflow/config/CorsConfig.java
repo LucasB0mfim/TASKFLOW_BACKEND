@@ -6,6 +6,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
+ * Classe responsável por configurar o suporte a CORS no sistema.
+ * Permite o acesso de origens externas, necessário em sistemas distribuídos.
+ * 
  * @author Lucas Bomfim
  */
 

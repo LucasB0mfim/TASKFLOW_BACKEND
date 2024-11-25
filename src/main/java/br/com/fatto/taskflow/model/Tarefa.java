@@ -12,7 +12,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 /**
- * @author Lucas Bomfim 
+ * Entidade que representa uma Tarefa no sistema.
+ * Contém informações como nome, custo, data limite e ordem.
+ * 
+ * @author Lucas
  */
 
 @Entity

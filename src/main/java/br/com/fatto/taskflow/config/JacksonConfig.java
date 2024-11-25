@@ -11,7 +11,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * @author Lucas Bomfim 
+ * Classe de configuração para personalizar o comportamento do ObjectMapper.
+ * Aqui é feita a serialização e deserialização de datas no formato "dd/MM/yyyy".
+ * 
+ * @author Lucas Bomfim
  */
 
 @Configuration
@@ -24,10 +27,13 @@ public class JacksonConfig {
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
 
-        // Serializador e Deserializador para LocalDate
+        // Serializa LocalDate no formato definido.
         module.addSerializer(LocalDate.class, new LocalDateSerializer(FORMATTER));
+        
+        // Desserializa LocalDate no formato definido.
         module.addDeserializer(LocalDate.class, new LocalDateDeserializer(FORMATTER));
 
+        // Registra o módulo no ObjectMapper.
         mapper.registerModule(module);
         return mapper;
     }
