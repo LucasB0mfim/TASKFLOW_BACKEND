@@ -77,9 +77,11 @@ public class TarefaService {
 	    }
 
 	    tarefaExistente.setNome(tarefaAtualizada.getNome());
+	    tarefaExistente.setDescricao(tarefaAtualizada.getDescricao());
 	    tarefaExistente.setCusto(tarefaAtualizada.getCusto());
 	    tarefaExistente.setDataLimite(tarefaAtualizada.getDataLimite());
 	    tarefaExistente.setOrdem(tarefaAtualizada.getOrdem());
+	    tarefaExistente.setStatus(tarefaAtualizada.getStatus());
 
 	    return tarefaRepository.save(tarefaExistente);
 	}
