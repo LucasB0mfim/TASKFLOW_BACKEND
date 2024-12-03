@@ -95,7 +95,7 @@ Antes de atualizar a terafa, **anote o id e a ordem** que aparece ao buscar toda
 - Método: `PUT`
 
 
-- Endereço: `http://localhost:8080/api/tarefas/id`
+- Endereço: `http://localhost:8080/api/tarefas/{id}`
 
 
 - Corpo da requisição: `Body`
