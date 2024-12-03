@@ -131,7 +131,7 @@ Antes de deletar a terafa, **anote o id** dela que aparece ao buscar todas as ta
 - Método: `DELETE`
 
 
-- Endereço: `http://localhost:8080/api/tarefas/id`
+- Endereço: `http://localhost:8080/api/tarefas/{id}`
 
 ## ⚖️ Licença
 Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
